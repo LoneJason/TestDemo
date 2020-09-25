@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+ <TextView
+     android:id="@+id/serch"
+     android:layout_width="@dimen/dp_158"
+     android:layout_height="@dimen/dp_60"
+     android:layout_marginLeft="@dimen/dp_12"
+     android:layout_marginTop="@dimen/dp_67"
+     android:textSize="20sp"
+     android:text="神奇的按钮"
+     android:gravity="center"
+     android:background="@color/colorAccent"
+
+     />
+
+
+ <androidx.recyclerview.widget.RecyclerView
+     android:id="@+id/recycler"
+     android:layout_width="match_parent"
+     android:layout_height="wrap_content"
+     android:layout_below="@id/serch"
+     android:layout_marginTop="10dp"
+     android:visibility="gone"
+     />
+  <SurfaceView
+      android:id="@+id/mysurface"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_marginTop="10dp"
+      android:layout_below="@id/serch"
+      android:visibility="gone"
+      />
+
+
+
+</RelativeLayout>
