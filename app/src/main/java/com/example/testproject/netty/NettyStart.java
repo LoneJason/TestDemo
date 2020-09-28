@@ -76,6 +76,19 @@ public class NettyStart {
         public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
             super.exceptionCaught(ctx, cause);
         }
+
+        //当把channelHandler添加到ChannelPipeline中时调用
+        @Override
+        public void handlerAdded(ChannelHandlerContext ctx) throws Exception {
+            super.handlerAdded(ctx);
+        }
+        //当把channelHandler从ChannelPipeline删除中时调用
+
+        @Override
+        public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
+            super.handlerRemoved(ctx);
+        }
+
     }
 
     /**
@@ -133,4 +146,6 @@ public class NettyStart {
             ctx.close();   //关闭channel
         }
     }
+
+
 }
