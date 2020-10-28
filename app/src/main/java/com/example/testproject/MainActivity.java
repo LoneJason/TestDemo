@@ -3,6 +3,7 @@ package com.example.testproject;
 
 import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Build;

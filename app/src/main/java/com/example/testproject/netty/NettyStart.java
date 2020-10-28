@@ -1,24 +1,57 @@
 package com.example.testproject.netty;
 
+import android.content.Context;
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.util.Log;
 
 import java.net.InetSocketAddress;
+import java.nio.MappedByteBuffer;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.LogRecord;
+
+import javax.net.ssl.SSLEngine;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelOutboundHandlerAdapter;
+import io.netty.channel.ChannelPromise;
+import io.netty.channel.CombinedChannelDuplexHandler;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.codec.ByteToMessageCodec;
+import io.netty.handler.codec.ByteToMessageDecoder;
+import io.netty.handler.codec.DelimiterBasedFrameDecoder;
+import io.netty.handler.codec.FixedLengthFrameDecoder;
+import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
+import io.netty.handler.codec.LineBasedFrameDecoder;
+import io.netty.handler.codec.MessageToByteEncoder;
+import io.netty.handler.codec.MessageToMessageCodec;
+import io.netty.handler.codec.MessageToMessageDecoder;
+import io.netty.handler.codec.MessageToMessageEncoder;
+import io.netty.handler.codec.ReplayingDecoder;
+import io.netty.handler.codec.TooLongFrameException;
+import io.netty.handler.codec.http.FullHttpRequest;
+import io.netty.handler.ssl.SslContext;
+import io.netty.handler.timeout.IdleState;
+import io.netty.handler.timeout.IdleStateEvent;
+import io.netty.handler.timeout.IdleStateHandler;
+import io.netty.handler.timeout.ReadTimeoutHandler;
+import io.netty.handler.timeout.WriteTimeoutHandler;
 import io.netty.util.CharsetUtil;
+import okhttp3.OkHttpClient;
 
 
 public class NettyStart {
@@ -36,6 +69,7 @@ public class NettyStart {
         final ServerHandler server = new ServerHandler();
         EventLoopGroup group = new NioEventLoopGroup();  //创建EventLoopGroup
         ServerBootstrap bootstrap = new ServerBootstrap();  //创建服务引导
+
         bootstrap.group(group)
                 .channel(NioServerSocketChannel.class)  //指定NIO传输Channel
                 .localAddress(12530)  //指定端口设置套接字地址
@@ -88,7 +122,6 @@ public class NettyStart {
         public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
             super.handlerRemoved(ctx);
         }
-
     }
 
     /**
@@ -111,7 +144,15 @@ public class NettyStart {
                 {
                     @Override
                     protected void initChannel(SocketChannel ch) throws Exception {
+                        ch.alloc();
                         ch.pipeline().addLast(new ClientHandler());   //把Handler添加进channel的pipeline中
+                        ch.pipeline().addLast(new LineBasedFrameDecoder(1024));  //以/n/r为分割符
+                        String delimiter="xx";
+                        ch.pipeline().addLast(new DelimiterBasedFrameDecoder(1024,
+                                Unpooled.wrappedBuffer(delimiter.getBytes())));   //以xx为分割符
+                        ch.pipeline().addLast(new LengthFieldBasedFrameDecoder(1024,0,4,0,4));
+                        ch.pipeline().addLast(new IdleStateHandler(0,0,15, TimeUnit.SECONDS)); //参数1 读时间,参数2 写时间，参数3 读写时间，参数4 时间类型
+                        ch.pipeline().addLast(new HeartbeatHandler());
                     }
                 });
         ChannelFuture future = bootstrap.connect().sync();     //连接远程节点，阻塞等待并且等待直到连接完成，返回一个ChannelFuture
@@ -145,7 +186,28 @@ public class NettyStart {
             cause.printStackTrace();   //记录异常错误
             ctx.close();   //关闭channel
         }
+
     }
+
+    class HeartbeatHandler extends ChannelInboundHandlerAdapter
+    {
+
+
+        @Override
+        public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
+            super.userEventTriggered(ctx, evt);
+             if (evt instanceof IdleStateEvent)   //触发了IdleStateEvent事件
+             {
+                 ctx.writeAndFlush("xxxx").addListener(ChannelFutureListener.CLOSE_ON_FAILURE);  //要发送的心跳包数据内容,如果发送失败了就断开了连接
+             }
+             else
+             {
+                 super.userEventTriggered(ctx,evt);   //不是IdleStateEvent事件那么就会传递给下一个channel
+             }
+        }
+    }
+
+
 
 
 }

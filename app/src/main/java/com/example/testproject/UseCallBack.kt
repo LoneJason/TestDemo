@@ -10,7 +10,7 @@ class UseCallBack : TestKotlin.MyCallBack {
     }
 
     override fun back(name: String) {
-        super.back(name)
+
 
     }
 

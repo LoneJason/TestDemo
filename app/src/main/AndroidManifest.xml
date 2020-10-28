@@ -5,6 +5,8 @@
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
@@ -17,20 +19,27 @@
         <activity android:name=".MainActivity" >
 
         </activity>
-        <activity android:name=".bluetooth.BluetoothActivity"></activity>
-        <activity android:name=".changeview.ChangeActivity">
-
-        </activity>
-        <activity android:name=".livedata.LiveDataActivity">
+        <activity android:name=".bluetooth.BluetoothActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".changeview.ChangeActivity">
+
+        </activity>
+        <activity android:name=".livedata.LiveDataActivity">
+
+        </activity>
 
         <service android:name=".service.testService" />
         <service android:name=".service.AIDLservice" />
+        <service android:name=".base.PhoneService"  android:permission="android.permission.BIND_SCREENING_SERVICE">
+            <intent-filter>
+                <action android:name="android.telecom.CallScreeningService"/>
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

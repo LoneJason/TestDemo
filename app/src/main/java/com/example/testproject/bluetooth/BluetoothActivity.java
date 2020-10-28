@@ -50,7 +50,8 @@ public class BluetoothActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();   //获取蓝牙适配器
         //开启权限检查
-        getBlePermissionFromSys();
+//        getBlePermissionFromSys();
+        Permission();
         if(bluetoothAdapter==null)   //判断是否有蓝牙
         {
             Toast.makeText(this,"本机没有蓝牙设备",Toast.LENGTH_SHORT).show();
@@ -72,6 +73,12 @@ public class BluetoothActivity extends AppCompatActivity {
         intentFilter.addAction(BluetoothDevice.ACTION_FOUND);
         //注册广播接收器
         registerReceiver(mReceiver, intentFilter);
+        IntentFilter filterStart = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_STARTED);
+        registerReceiver(mReceiver, filterStart);
+
+        IntentFilter filterFinish = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
+        registerReceiver(mReceiver, filterFinish);
+
         bluetoothAdapter.cancelDiscovery();    //暂停蓝牙扫描
         bluetoothAdapter.startDiscovery();    //开启蓝牙扫描
         Toast.makeText(this,"开始扫描",Toast.LENGTH_SHORT).show();
@@ -101,6 +108,7 @@ public class BluetoothActivity extends AppCompatActivity {
         String action = intent.getAction();
         if (BluetoothDevice.ACTION_FOUND.equals(action))     //判断广播返回是否是蓝牙的返回
         {
+
             device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);   //获取当前的蓝牙设备
             if (device == null) return;
             if(!devices.contains(device))    //判断当前设备有没有被添加进去
@@ -217,6 +225,21 @@ public class BluetoothActivity extends AppCompatActivity {
                     return;
                 }
             }
+        }
+    }
+    //踩坑Android10以后就要用ACCESS_FINE_LOCATION，如果用ACCESS_COARSE_LOCATION是扫描不出来任何东西的
+    public void Permission()
+    {
+        String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION};
+        for (String str : permissions) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (this.checkSelfPermission(str) != PackageManager.PERMISSION_GRANTED) {
+                    this.requestPermissions(permissions,103);
+                    return;
+                }
+
+            }
+
         }
     }
 
