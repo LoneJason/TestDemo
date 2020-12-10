@@ -1,11 +1,17 @@
 package com.example.testproject;
 
 
-import android.annotation.SuppressLint;
-import android.app.ActivityOptions;
-import android.bluetooth.BluetoothAdapter;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.bluetooth.BluetoothDevice;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.transition.Explode;
@@ -15,20 +21,25 @@ import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.Window;
+import android.widget.RemoteViews;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.core.app.NotificationCompat;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.testproject.base.NotifyService;
+import com.example.testproject.mvvm.AViewModel;
+import com.example.testproject.mvvm.LifeActivity;
 import com.example.testproject.base.BaseActivity;
-import com.example.testproject.bluetooth.BluetoothActivity;
-import com.example.testproject.changeview.ChangeActivity;
+import com.example.testproject.netty.AirKiss;
+import com.example.testproject.netty.NettySend;
 import com.example.testproject.service.MyServiceUtil;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class MainActivity extends BaseActivity {
 
@@ -49,11 +60,34 @@ public class MainActivity extends BaseActivity {
         surfaceView = findViewById(R.id.mysurface);
 //        hideBottomUIMenu();
         serviceUtil = new MyServiceUtil();    //测试服务demo
+        ViewModelProviders.of(this).get(AViewModel.class).getLiveData().observe(this, new Observer() {
+            @Override
+            public void onChanged(Object o) {
+                Log.d("mytest",o.toString());
+            }
+        });
+        AirKiss airKiss=new AirKiss();
+        airKiss.startBoot();
+        findViewById(R.id.receive).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                NettyReceive receive=new NettyReceive();
+//                NettyReceive.AccepterRunner runner=receive.new AccepterRunner();
+//                runner.main();
+                ViewModelProviders.of(MainActivity.this).get(AViewModel.class).updataUser();
+                startActivity(new Intent(MainActivity.this, LifeActivity.class));
+
+            }
+        });
         findViewById(R.id.serch).setOnClickListener(new View.OnClickListener() {
-            @SuppressLint("WrongConstant")
             @Override
             public void onClick(View v) {
-                MainActivity.this.startActivity(new Intent(MainActivity.this, BluetoothActivity.class));
+                   Intent intent=new Intent(MainActivity.this, NotifyService.class);
+                   startService(intent);
+//                NettySend send=new NettySend();
+//                NettySend.BroadcastRunner runner=send.new BroadcastRunner();
+//                runner.main();
+//                MainActivity.this.startActivity(new Intent(MainActivity.this, BluetoothActivity.class));
 //                MainActivity.this.startActivity(new Intent(MainActivity.this, ChangeActivity.class), ActivityOptions.makeSceneTransitionAnimation(MainActivity.this).toBundle());
 //            imageList.setLayoutManager(new LinearLayoutManager(MainActivity.this, LinearLayout.VERTICAL,false));
 //            MyRecyclerViewAdapter adapter=new MyRecyclerViewAdapter(list);
@@ -69,7 +103,7 @@ public class MainActivity extends BaseActivity {
 //                } catch (Exception e) {
 //                    e.printStackTrace();
 //                }
-                GsonUtil util = new GsonUtil(new String[]{"oneJson", "twoJson"}, new String[]{"JUSToNE", "JUSTtWO"});
+//                GsonUtil util = new GsonUtil(new String[]{"oneJson", "twoJson"}, new String[]{"JUSToNE", "JUSTtWO"});
 //             String text=util.changeGson();
 //            Log.d("mytest", text);
 //            util.fromGson(text);
@@ -81,21 +115,22 @@ public class MainActivity extends BaseActivity {
 //            list.add("fuck");
 //            util.toListJson(list);
                 //map转换json
-                Map<String, String> params = new HashMap<>();
-                params.put("oneMap", "hi");
-                params.put("twoMap", "hello");
-                params.put("threeMap", "hai");
-                util.toMapJson(params);
+//                Map<String, String> params = new HashMap<>();
+//                params.put("oneMap", "hi");
+//                params.put("twoMap", "hello");
+//                params.put("threeMap", "hai");
+//                util.toMapJson(params);
+
             }
         });
-        openSeriport();
-        serviceUtil.aidlService(this);
-        imageList.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return false;
-            }
-        });
+//        openSeriport();
+//        serviceUtil.aidlService(this);
+//        imageList.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                return false;
+//            }
+//        });
 
     }
 
@@ -181,6 +216,7 @@ public class MainActivity extends BaseActivity {
         super.onBackPressed();
         finishAfterTransition();
     }
+
 
 
 }

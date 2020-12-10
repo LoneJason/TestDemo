@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.databinding.ViewDataBinding;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -33,6 +34,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position)
     {
+
         myHolder myholder= (myHolder) holder;
 //        Bitmap bitmap = BitmapFactory.decodeFile(list.get(position));
         myholder.textView.setImageBitmap(list.get(position));

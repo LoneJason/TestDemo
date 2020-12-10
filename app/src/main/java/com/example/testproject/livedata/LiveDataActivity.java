@@ -14,13 +14,13 @@ import com.example.testproject.UseCallBack;
 
 public class LiveDataActivity extends AppCompatActivity
 {
-    TextView tetx;
+//    TextView tetx;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_livedata);
-       tetx=findViewById(R.id.livedata_text);
+//       tetx=findViewById(R.id.livedata_text);
        findViewById(R.id.livedata_btn).setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
@@ -42,7 +42,7 @@ public class LiveDataActivity extends AppCompatActivity
         Observer<String> observer=new Observer<String>() {
             @Override
             public void onChanged(String s) {
-                tetx.setText(s);
+//                tetx.setText(s);
             }
         };
 

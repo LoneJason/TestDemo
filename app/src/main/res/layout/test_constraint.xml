@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/sda"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="文本"
+        android:textSize="@dimen/sp_32"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintVertical_bias="0.4"
+        app:layout_constraintHorizontal_bias="0.3"
+        />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:layout_marginLeft="28dp"
+        android:text="TextView"
+        app:layout_constraintBottom_toTopOf="@+id/sda"
+        app:layout_constraintStart_toEndOf="@+id/sda"
+        app:layout_constraintTop_toBottomOf="@+id/sda"
+        app:layout_constraintVertical_bias="0.4"
+        />
+<!--    这个用来管理多个控件的隐藏和展示-->
+    <androidx.constraintlayout.widget.Group
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="view1,view2"
+
+       />
+    <View
+        android:id="@+id/view1"
+        android:layout_width="@dimen/dp_0"
+        android:layout_height="@dimen/dp_50"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="#f23664"
+        android:layout_marginTop="@dimen/dp_20"
+        app:layout_constraintDimensionRatio="3:1"
+        />
+    <View
+        android:id="@+id/view2"
+        android:layout_width="@dimen/dp_0"
+        android:layout_height="@dimen/dp_50"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/view1"
+        android:layout_marginRight="@dimen/dp_50"
+        android:layout_marginLeft="@dimen/dp_50"
+        android:background="#00f604"
+        android:layout_marginTop="@dimen/dp_20"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

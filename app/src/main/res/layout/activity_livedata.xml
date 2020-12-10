@@ -1,29 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <import type="com.example.testproject.mvvm.UserBean"/>
+        <variable name="user" type="UserBean"/>
+        <variable
+            name="myobject"
+            type="com.example.testproject.mvvm.BindingObject" />
+        <variable
+            name="viewModel"
+            type="com.example.testproject.mvvm.LiveDataUserBean" />
+    </data>
+<LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
-    android:orientation="vertical">
-
+    android:orientation="vertical"
+    >
     <TextView
         android:id="@+id/livedata_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/black"
         android:textSize="@dimen/sp_25"
-        android:text="展示数据"
+        android:text="对象绑定——点击事件"
         android:layout_marginLeft="@dimen/dp_10"
         android:layout_marginTop="@dimen/dp_20"
         android:background="@color/colorAccent"
+        android:onClick="@{myobject.click}"
         />
     <TextView
-        android:id="@+id/livedata_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/black"
         android:textSize="@dimen/sp_25"
-        android:text="默认数据"
+        android:text="对象绑定——模式1"
         android:layout_marginLeft="@dimen/dp_10"
         android:layout_marginTop="@dimen/dp_20"
+        android:onClick="@{myobject.clickMethod1}"
+        />
+    <TextView
+        android:id="@+id/viewMode_use"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:textSize="@dimen/sp_25"
+        android:text="使用ViewModel"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:layout_marginTop="@dimen/dp_20"
+    />
+    <!--        android:onClick='@{(view) -> myobject.paramsMethod(view,context,"这是一段返回的lambda文本")}'-->
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/sp_32"
+        android:textColor="@color/black"
+        android:layout_marginLeft="@dimen/dp_20"
+        android:layout_marginTop="@dimen/dp_20"
+        android:text="@{user.name}"
+        />
+    <TextView
+        android:id="@+id/age"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/sp_32"
+        android:textColor="@color/black"
+        android:layout_marginLeft="@dimen/dp_20"
+        android:layout_marginTop="@dimen/dp_20"
+        android:text="@{user.age}"
+        />
+    <TextView
+        android:id="@+id/viewMode_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/sp_32"
+        android:textColor="@color/black"
+        android:layout_marginLeft="@dimen/dp_20"
+        android:layout_marginTop="@dimen/dp_20"
+        android:text="@{viewModel.old}"
         />
 </LinearLayout>
+
+</layout>
