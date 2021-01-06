@@ -10,10 +10,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.transition.Explode;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -31,6 +33,8 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.testproject.base.NotifyService;
+import com.example.testproject.hotfix.DexClassLoaderDemo;
+import com.example.testproject.hotfix.PathClassLoaderDemo;
 import com.example.testproject.mvvm.AViewModel;
 import com.example.testproject.mvvm.LifeActivity;
 import com.example.testproject.base.BaseActivity;
@@ -38,8 +42,13 @@ import com.example.testproject.netty.AirKiss;
 import com.example.testproject.netty.NettySend;
 import com.example.testproject.service.MyServiceUtil;
 
+import java.io.File;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+
+import dalvik.system.DexClassLoader;
 
 public class MainActivity extends BaseActivity {
 
@@ -59,6 +68,7 @@ public class MainActivity extends BaseActivity {
         imageList = findViewById(R.id.recycler);
         surfaceView = findViewById(R.id.mysurface);
 //        hideBottomUIMenu();
+        phoneMessage();
         serviceUtil = new MyServiceUtil();    //测试服务demo
         ViewModelProviders.of(this).get(AViewModel.class).getLiveData().observe(this, new Observer() {
             @Override
@@ -82,8 +92,12 @@ public class MainActivity extends BaseActivity {
         findViewById(R.id.serch).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                   Intent intent=new Intent(MainActivity.this, NotifyService.class);
-                   startService(intent);
+
+                DexClassLoaderDemo demo=new DexClassLoaderDemo();
+                demo.Loader(MainActivity.this);
+
+
+
 //                NettySend send=new NettySend();
 //                NettySend.BroadcastRunner runner=send.new BroadcastRunner();
 //                runner.main();
@@ -139,7 +153,7 @@ public class MainActivity extends BaseActivity {
     public void phoneMessage() {
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
-        Log.d("mytest", "dp转px比例：" + dm.density + "，dpi值" + dm.densityDpi + "，宽度的尺寸" + dm.widthPixels + "--" + dm.ydpi);
+        Log.d("mytest", "dp转px比例：" + dm.density + "，dpi值" + dm.densityDpi + "，宽度的尺寸" + dm.widthPixels );
     }
 
     //给父类传值

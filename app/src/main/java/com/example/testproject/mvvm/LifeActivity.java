@@ -15,6 +15,7 @@ import androidx.databinding.library.baseAdapters.BR;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LifecycleRegistry;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
 import com.example.testproject.R;
@@ -47,6 +48,7 @@ public class LifeActivity extends Activity implements LifecycleOwner {
                 bean.setAge("18");
                 bean.setName("小明");
                 liveData.postValue(bean);
+
             }
         }, 3000);
     }

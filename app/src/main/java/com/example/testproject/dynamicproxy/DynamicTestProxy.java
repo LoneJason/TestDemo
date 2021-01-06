@@ -1,6 +1,8 @@
 package com.example.testproject.dynamicproxy;
 
 
+import org.jetbrains.annotations.TestOnly;
+
 public class DynamicTestProxy
 {
     /**

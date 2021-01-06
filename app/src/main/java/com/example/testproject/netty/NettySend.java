@@ -41,6 +41,7 @@ public class NettySend
                     //设置通道用于广播
                     .option(ChannelOption.SO_BROADCAST, true)
                     .handler(new NoticeEncoder(new InetSocketAddress(Constant.BROADCAST_IP, remotePort)));
+
         }
 
         /**

@@ -12,7 +12,7 @@ public class FruitInfoUtil
 {
     public static void useUtil() throws Exception {
         //通过反射获取对象
-        Class clazz=Class.forName("com.example.testproject.annotation.Apple");
+        Class clazz=Class.forName("com.example.testproject.annotation.Apple",true,ClassLoader.getSystemClassLoader());
         Object o=clazz.newInstance();     //获取一个对象实例
         Field[] fields=clazz.getDeclaredFields();
         for (Field field:fields)     //遍历Apple里面的变量

@@ -19,7 +19,7 @@ android {
     }
     defaultConfig {
         applicationId "com.example.testproject"
-        minSdkVersion 14
+        minSdkVersion 16
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -28,14 +28,14 @@ android {
     }
 
     buildTypes {
-        release {
-            minifyEnabled true   //开启混淆
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'   //系统默认混淆规则
-        }
+//        release {
+//            minifyEnabled true   //开启混淆
+//            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'   //系统默认混淆规则
+//        }
        debug{
-           minifyEnabled true
-          shrinkResources true    //  //移除无用的resource文件
-           debuggable true         //是否支持调试
+           minifyEnabled false
+//          shrinkResources true    //  //移除无用的resource文件
+//           debuggable true         //是否支持调试
        }
     }
 
